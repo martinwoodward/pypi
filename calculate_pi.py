@@ -1,6 +1,6 @@
 """
 Pi Calculator - Monte Carlo Method
-Calculates pi to 20 decimal places
+Calculates pi to 15 decimal places
 """
 
 import random
@@ -104,8 +104,8 @@ def format_pi_with_color(value, reference):
     Returns:
         Formatted string with ANSI color codes
     """
-    value_str = f"{value:.20f}"
-    reference_str = f"{reference:.20f}"
+    value_str = f"{value:.15f}"
+    reference_str = f"{reference:.15f}"
     
     result = []
     diverged = False
@@ -138,7 +138,7 @@ def main():
     iterations = 10_000_000  # 10 million points
     print(f"Generating {iterations:,} random points...")
     pi_monte_carlo = calculate_pi_monte_carlo(iterations)
-    print(f"Estimated pi: {pi_monte_carlo:.20f}")
+    print(f"Estimated pi: {pi_monte_carlo:.15f}")
     print()
     
     # Method 2: Leibniz Formula
@@ -147,7 +147,7 @@ def main():
     terms = 5_000_000  # 5 million terms
     print(f"Calculating {terms:,} terms...")
     pi_leibniz = calculate_pi_leibniz(terms)
-    print(f"Estimated pi: {pi_leibniz:.20f}")
+    print(f"Estimated pi: {pi_leibniz:.15f}")
     print()
     
     # Method 3: Buffon's Needle
@@ -156,7 +156,7 @@ def main():
     drops = 2_000_000  # 2 million drops
     print(f"Dropping {drops:,} needles...")
     pi_buffon = calculate_pi_buffon_needle(drops)
-    print(f"Estimated pi: {pi_buffon:.20f}")
+    print(f"Estimated pi: {pi_buffon:.15f}")
     print()
     
     # Summary comparison
@@ -169,7 +169,7 @@ def main():
     print(f"{'Monte Carlo':<20} {format_pi_with_color(pi_monte_carlo, actual_pi):<25} {abs(pi_monte_carlo - actual_pi):<15.10e}")
     print(f"{'Leibniz':<20} {format_pi_with_color(pi_leibniz, actual_pi):<25} {abs(pi_leibniz - actual_pi):<15.10e}")
     print(f"{'Buffon Needle':<20} {format_pi_with_color(pi_buffon, actual_pi):<25} {abs(pi_buffon - actual_pi):<15.10e}")
-    print(f"{'Actual π':<20} {actual_pi:<25.20f}")
+    print(f"{'Actual π':<20} {actual_pi:<25.15f}")
     print("=" * 60)
     print()
 
