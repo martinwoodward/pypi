@@ -127,7 +127,7 @@ Actual pi:    3.14159265358979323846
 
 ## Performance Notes
 
-- **Inefficient version**: Takes 2-5 minutes depending on your CPU
+- **Inefficient version**: Takes ~30-60 seconds depending on your CPU
 - **Optimized version**: Takes 5-10 seconds
 - The inefficiency is intentional for educational purposes
 
