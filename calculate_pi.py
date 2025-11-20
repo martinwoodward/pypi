@@ -5,6 +5,13 @@ Calculates pi to 20 decimal places
 
 import random
 from decimal import Decimal, getcontext
+from codecarbon import EmissionsTracker
+import warnings
+import logging
+
+# Suppress codecarbon warnings
+logging.getLogger('codecarbon').setLevel(logging.ERROR)
+warnings.filterwarnings('ignore', category=UserWarning, module='codecarbon')
 
 def calculate_pi_monte_carlo(iterations):
     """
@@ -132,13 +139,19 @@ def main():
     print("=" * 60)
     print()
     
+    emissions_data = []
+    
     # Method 1: Monte Carlo (moderate accuracy)
     print("Method 1: Monte Carlo Simulation")
     print("-" * 60)
     iterations = 10_000_000  # 10 million points
     print(f"Generating {iterations:,} random points...")
+    tracker = EmissionsTracker(log_level='error', save_to_file=False)
+    tracker.start()
     pi_monte_carlo = calculate_pi_monte_carlo(iterations)
+    emissions_monte_carlo = tracker.stop()
     print(f"Estimated pi: {pi_monte_carlo:.20f}")
+    emissions_data.append(('Monte Carlo', emissions_monte_carlo))
     print()
     
     # Method 2: Leibniz Formula
@@ -146,8 +159,12 @@ def main():
     print("-" * 60)
     terms = 5_000_000  # 5 million terms
     print(f"Calculating {terms:,} terms...")
+    tracker = EmissionsTracker(log_level='error', save_to_file=False)
+    tracker.start()
     pi_leibniz = calculate_pi_leibniz(terms)
+    emissions_leibniz = tracker.stop()
     print(f"Estimated pi: {pi_leibniz:.20f}")
+    emissions_data.append(('Leibniz', emissions_leibniz))
     print()
     
     # Method 3: Buffon's Needle
@@ -155,8 +172,12 @@ def main():
     print("-" * 60)
     drops = 2_000_000  # 2 million drops
     print(f"Dropping {drops:,} needles...")
+    tracker = EmissionsTracker(log_level='error', save_to_file=False)
+    tracker.start()
     pi_buffon = calculate_pi_buffon_needle(drops)
+    emissions_buffon = tracker.stop()
     print(f"Estimated pi: {pi_buffon:.20f}")
+    emissions_data.append(('Buffon Needle', emissions_buffon))
     print()
     
     # Summary comparison
@@ -170,6 +191,27 @@ def main():
     print(f"{'Leibniz':<20} {format_pi_with_color(pi_leibniz, actual_pi):<25} {abs(pi_leibniz - actual_pi):<15.10e}")
     print(f"{'Buffon Needle':<20} {format_pi_with_color(pi_buffon, actual_pi):<25} {abs(pi_buffon - actual_pi):<15.10e}")
     print(f"{'Actual π':<20} {actual_pi:<25.20f}")
+    print("=" * 60)
+    
+    # Carbon emissions comparison
+    print()
+    print("=" * 60)
+    print("Carbon Emissions")
+    print("=" * 60)
+    print(f"{'Method':<20} {'CO₂ (kg)':<20} {'Difference':<20}")
+    print("-" * 60)
+    
+    # Find min emissions for comparison
+    min_emissions = min(e[1] for e in emissions_data)
+    
+    for method, emissions in emissions_data:
+        diff = emissions - min_emissions
+        diff_pct = (diff / min_emissions * 100) if min_emissions > 0 else 0
+        print(f"{method:<20} {emissions:<20.6e} {diff_pct:>6.2f}% more")
+    
+    total_emissions = sum(e[1] for e in emissions_data)
+    print("-" * 60)
+    print(f"{'Total':<20} {total_emissions:<20.6e}")
     print("=" * 60)
     print()
 
