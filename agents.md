@@ -1,4 +1,9 @@
 # Agent Instructions for PyPI Project
+NEVER touch the real value of pi in the code:
+
+```python
+actual_pi = 3.14159265358979323846
+```
 
 ## Environment Setup
 
@@ -41,3 +46,4 @@ source .venv/bin/activate
 ## Current Dependencies
 
 See `requirements.txt` for the complete list of project dependencies.
+
